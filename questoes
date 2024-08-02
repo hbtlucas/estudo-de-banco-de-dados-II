@@ -1,0 +1,10 @@
+Questões
+1) Criar procedimento para apresentar a quantidade de acervos agrupados por região
+de nascimentos dos autores. O procedimento não terá parâmetros.
+
+2) Implemente uma função para retornar o nome da biblioteca, o título do livro e os
+autores do mesmo. A função será parametrizada pelo código do acervo.
+
+3) Criar um procedimento para apresentar o acervo de forma hierárquica com a
+quantidade de páginas e os respectivos livros (título). Restrinja a quantidade de
+páginas para livros com mais de 100 páginas.
