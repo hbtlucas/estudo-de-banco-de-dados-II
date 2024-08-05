@@ -1,68 +1,68 @@
 1)
-2 create or replace procedure PRegioes() language plpgsql as
-3 $$
-4 declare CRegioes cursor for select au.regiaonascimento,count(*) total
-5 from acervos ac,autores au,acervosautores aa
-6 where ac.codigoacervo=aa.codigoacervo
-7 and au.codigoautor=aa.codigoautor
-8 group by au.regiaonascimento;
-9
-10 begin
-11 for Reg in CRegioes
-12 loop
-13 raise notice '% - %',Reg.regiaonascimento,Reg.total;
-14 end loop;
-15 end;
-16 $$
-17
-18 call PRegioes();
-19 ----------------------------------------------------------------------------
-20 2)
-21 create or replace function FAutores(codigo numeric(5)) returns varchar as
-22 $$
-23 declare titulo varchar(100);
-24 biblioteca varchar(30);
-25 autores varchar(100);
-26 CAutores cursor for select au.nomeautor from autores au,acervosautores aa
-27 where au.codigoautor=aa.codigoautor
-28 and aa.codigoacervo=codigo;
-29
-30 begin
-31 autores:='';
-32 select ac.titulo,bb.descricaobiblioteca into titulo,biblioteca
-33 from acervos ac,bibliotecas bb
-34 where ac.codigobiblioteca=bb.codigobiblioteca
-35 and codigoacervo=codigo;
-36
-37 for dados in CAutores
-38 loop
-39 autores:=autores||'['||dados.nomeautor||']';
-40 end loop;
-41 return 'Titulo:'||titulo||', Biblioteca:'||biblioteca||', Autores:'||autores;
-42 end;
+ create or replace procedure PRegioes() language plpgsql as
+ $$
+ declare CRegioes cursor for select au.regiaonascimento,count(*) total
+ from acervos ac,autores au,acervosautores aa
+ where ac.codigoacervo=aa.codigoacervo
+ and au.codigoautor=aa.codigoautor
+ group by au.regiaonascimento;
+
+ begin
+ for Reg in CRegioes
+ loop
+ raise notice '% - %',Reg.regiaonascimento,Reg.total;
+ end loop;
+ end;
+ $$
+
+ call PRegioes();
+ ----------------------------------------------------------------------------
+ 2)
+ create or replace function FAutores(codigo numeric(5)) returns varchar as
+ $$
+ declare titulo varchar(100);
+ biblioteca varchar(30);
+ autores varchar(100);
+ CAutores cursor for select au.nomeautor from autores au,acervosautores aa
+ where au.codigoautor=aa.codigoautor
+ and aa.codigoacervo=codigo;
+
+ begin
+ autores:='';
+ select ac.titulo,bb.descricaobiblioteca into titulo,biblioteca
+ from acervos ac,bibliotecas bb
+ where ac.codigobiblioteca=bb.codigobiblioteca
+ and codigoacervo=codigo;
+
+ for dados in CAutores
+ loop
+ autores:=autores||'['||dados.nomeautor||']';
+ end loop;
+ return 'Titulo:'||titulo||', Biblioteca:'||biblioteca||', Autores:'||autores;
+ end;
 43 $$ language plpgsql;
-44
-45 ----------------------------------------------------------------------------
-46 3)
-47 create or replace procedure PPaginas() language plpgsql as
-48 $$
-49 declare CPaginas cursor for select ac.paginas,count(*) total
-50 from acervos ac where ac.paginas>100
-51 group by ac.paginas;
-52
-53 CTitulos cursor(QtdePaginas numeric(4)) for select av.titulo from acervos av
-54 where av.paginas=QtdePaginas;
-55
-56 begin
-57 for RPaginas in CPaginas
-58 loop
-59 raise notice '%',RPaginas.paginas;
-60 for RTitulos in CTitulos(RPaginas.paginas)
-61 loop
-62 raise notice ' %',RTitulos.titulo;
-63 end loop;
-64 end loop;
-65 end;
-66 $$
-67
-68 call PPaginas()
+
+ ----------------------------------------------------------------------------
+ 3)
+ create or replace procedure PPaginas() language plpgsql as
+ $$
+ declare CPaginas cursor for select ac.paginas,count(*) total
+ from acervos ac where ac.paginas>100
+ group by ac.paginas;
+
+ CTitulos cursor(QtdePaginas numeric(4)) for select av.titulo from acervos av
+ where av.paginas=QtdePaginas;
+
+ begin
+ for RPaginas in CPaginas
+ loop
+ raise notice '%',RPaginas.paginas;
+ for RTitulos in CTitulos(RPaginas.paginas)
+ loop
+ raise notice ' %',RTitulos.titulo;
+ end loop;
+ end loop;
+ end;
+ $$
+
+ call PPaginas()
