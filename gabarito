@@ -40,7 +40,7 @@
  end loop;
  return 'Titulo:'||titulo||', Biblioteca:'||biblioteca||', Autores:'||autores;
  end;
-43 $$ language plpgsql;
+ $$ language plpgsql;
 
  ----------------------------------------------------------------------------
  3)
